@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <script>
+        async function signup(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const role = document.getElementById("role").value;
+
+            const response = await fetch("http://localhost:8081/api/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                    role: [role]
+                })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message || "User registered successfully!");
+                window.location.href = "signin.html"; // Redirect to signin page
+            } else {
+                alert(result.message || "Error during signup.");
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Signup</h1>
+<form onsubmit="signup(event)">
+    <label for="username">Username:</label>
+    <input type="text" id="username" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" required><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" required><br>
+
+    <label for="role">Role:</label>
+    <select id="role">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+    </select><br>
+
+    <button type="submit">Signup</button>
+</form>
+</body>
+</html>

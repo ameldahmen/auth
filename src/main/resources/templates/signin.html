@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signin</title>
+  <script>
+    async function signin(event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const response = await fetch("http://localhost:8081/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        })
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert("Signin successful!");
+        localStorage.setItem("token", result.token); // Save token for future requests
+        window.location.href = "dashboard.html"; // Redirect to dashboard
+      } else {
+        alert(result.message || "Error during signin.");
+      }
+    }
+  </script>
+</head>
+<body>
+<h1>Signin</h1>
+<form onsubmit="signin(event)">
+  <label for="username">Username:</label>
+  <input type="text" id="username" required><br>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" required><br>
+
+  <button type="submit">Signin</button>
+</form>
+</body>
+</html>
