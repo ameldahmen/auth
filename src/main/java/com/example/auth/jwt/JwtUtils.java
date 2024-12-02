@@ -23,27 +23,45 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
-    public String generateJwtToken(UserDetailsImpl userPrincipal) {
-        return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
-                .signWith(key(), SignatureAlgorithm.HS256)
-                .compact();
-    }
+//    public String generateJwtToken(UserDetailsImpl userPrincipal) {
+//        return Jwts.builder()
+//                .setSubject(userPrincipal.getUsername())
+//                .setIssuedAt(new Date())
+//                .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
+//                .signWith(key(), SignatureAlgorithm.HS256)
+//                .compact();
+//    }
+public String generateJwtToken(UserDetailsImpl userPrincipal) {
+    return Jwts.builder()
+            .setSubject(userPrincipal.getUsername())
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
+            .signWith(key(), SignatureAlgorithm.HS256)
+            .compact();
+}
 
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateJwtToken(String authToken) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            System.err.println("Invalid JWT token: " + e.getMessage());
-        }
-        return false;
+//    public boolean validateJwtToken(String authToken) {
+//        try {
+//            Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+//            return true;
+//        } catch (JwtException | IllegalArgumentException e) {
+//            System.err.println("Invalid JWT token: " + e.getMessage());
+//        }
+//        return false;
+//    }
+public boolean validateJwtToken(String authToken) {
+    try {
+        Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+        return true;
+    } catch (JwtException | IllegalArgumentException e) {
+        System.err.println("Invalid JWT token: " + e.getMessage());
     }
+    return false;
+}
+
 }
